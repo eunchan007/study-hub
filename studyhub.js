@@ -821,3 +821,60 @@
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+
+
+/* ============================================================
+   STUDY HUB UNIVERSAL EXPANSION: MODES & MONETIZATION PASS
+   ============================================================ */
+window.onAppModeChange = function() {
+  const select = document.getElementById('app-mode-select');
+  if (!select) return;
+  const mode = select.value;
+  localStorage.setItem('sh_app_mode', mode);
+  
+  const greetingEl = document.getElementById('sh-user-greeting');
+  const gradeSelect = document.getElementById('grade-select');
+  
+  if (mode === 'campus') {
+    if (greetingEl) greetingEl.textContent = '목표 시험·자격증 D-Day까지 오늘 1세트 클리어해봐요! 🎯';
+    if (gradeSelect) {
+      gradeSelect.innerHTML = '<option value="토익">토익</option><option value="오픽">오픽</option><option value="컴활">컴활</option><option value="기사">기사</option><option value="NCS">NCS</option><option value="대학학점">학점</option>';
+    }
+  } else if (mode === 'career') {
+    if (greetingEl) greetingEl.textContent = '오늘 딥워크(Deep Work) 25분 몰입으로 시작해볼까요? 💼';
+    if (gradeSelect) {
+      gradeSelect.innerHTML = '<option value="비즈영어">비즈영어</option><option value="코딩/IT">코딩/IT</option><option value="자격증">자격증</option><option value="독서/기록">독서/기록</option><option value="업무몰입">업무몰입</option>';
+    }
+  } else {
+    if (greetingEl) greetingEl.textContent = '오늘도 1단계 성장해볼까요? 🌱';
+    if (gradeSelect) {
+      gradeSelect.innerHTML = '<option value="중1">중1</option><option value="중2">중2</option><option value="중3">중3</option><option value="고1" selected>고1</option><option value="고2">고2</option><option value="고3">고3</option>';
+    }
+  }
+};
+
+window.openPassModal = function() {
+  const modal = document.getElementById('pass-modal');
+  if (modal) modal.classList.remove('hidden');
+};
+
+window.closePassModal = function() {
+  const modal = document.getElementById('pass-modal');
+  if (modal) modal.classList.add('hidden');
+};
+
+(function initSavedMode() {
+  function checkAndRestore() {
+    const savedMode = localStorage.getItem('sh_app_mode');
+    const select = document.getElementById('app-mode-select');
+    if (savedMode && select) {
+      select.value = savedMode;
+      window.onAppModeChange();
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkAndRestore);
+  } else {
+    setTimeout(checkAndRestore, 100);
+  }
+})();
